@@ -1,4 +1,5 @@
 import fadeHover from '/js/randomFadeHover.js';
+import  {LoaderTitleSplit,loader} from '/js/preloader.js';
 
 const parceled = true
 const onReady = () => {
@@ -6,6 +7,9 @@ const onReady = () => {
     
 }
 const onLoading = () => {
+    LoaderTitleSplit();
+    loader();
+ 
 
 
 }

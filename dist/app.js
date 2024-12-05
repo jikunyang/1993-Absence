@@ -599,11 +599,15 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _randomFadeHoverJs = require("/js/randomFadeHover.js");
 var _randomFadeHoverJsDefault = parcelHelpers.interopDefault(_randomFadeHoverJs);
+var _preloaderJs = require("/js/preloader.js");
 const parceled = true;
 const onReady = ()=>{
     (0, _randomFadeHoverJsDefault.default)();
 };
-const onLoading = ()=>{};
+const onLoading = ()=>{
+    (0, _preloaderJs.LoaderTitleSplit)();
+    (0, _preloaderJs.loader)();
+};
 if (document.readyState !== 'loading') {
     onLoading();
     onReady();
@@ -614,7 +618,7 @@ if (document.readyState !== 'loading') {
     document.addEventListener('DOMContentLoaded', onLoading);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -686,7 +690,7 @@ const fadeHover = ()=>{
 };
 exports.default = fadeHover;
 
-},{"split-type":"fvGAG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gsap":"fPSuC"}],"fvGAG":[function(require,module,exports,__globalThis) {
+},{"split-type":"fvGAG","gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fvGAG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>SplitType);
@@ -5761,6 +5765,70 @@ var CSSPlugin = {
 });
 (0, _gsapCoreJs.gsap).registerPlugin(CSSPlugin);
 
-},{"./gsap-core.js":"05eeC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
+},{"./gsap-core.js":"05eeC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fr1Gn":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "LoaderTitleSplit", ()=>LoaderTitleSplit);
+parcelHelpers.export(exports, "loader", ()=>loader);
+var _splitType = require("split-type");
+var _splitTypeDefault = parcelHelpers.interopDefault(_splitType);
+var _gsap = require("gsap");
+var _gsapDefault = parcelHelpers.interopDefault(_gsap);
+function LoaderTitleSplit() {
+    new (0, _splitTypeDefault.default)(".loader-title", {
+        types: "words, chars",
+        tagName: "span"
+    });
+    const chars = $(".loader-title").find(".char");
+    (0, _gsapDefault.default).set(chars, {
+        opacity: 0
+    }); // Set initial state
+    const titleLine = $(".preloder-title-line");
+    (0, _gsapDefault.default).set(titleLine, {
+        scaleY: 0
+    }); // Set initial state
+}
+function showTitle() {
+    const chars = $(".loader-title").find(".char");
+    const titleLine = $(".preloder-title-line");
+    (0, _gsapDefault.default).to(titleLine, {
+        scaleY: 1,
+        duration: 1.5,
+        ease: "power1.inOut"
+    });
+    (0, _gsapDefault.default).to(chars, {
+        opacity: 1,
+        duration: 0.6,
+        stagger: {
+            each: 0.1,
+            from: "random"
+        },
+        ease: "power1.out",
+        onComplete: showLoadTrigger
+    });
+}
+function showLoadTrigger() {
+    const loadTrigger = document.querySelector("#load-trigger");
+    let tl = (0, _gsapDefault.default).timeline();
+    tl.to(loadTrigger, {
+        opacity: 1,
+        duration: 0.6,
+        ease: "power1.out"
+    });
+}
+const loader = ()=>{
+    const preloaderLine = document.querySelector(".preloader-line");
+    // Preloader animation
+    let tl = (0, _gsapDefault.default).timeline();
+    tl.to(preloaderLine, {
+        scaleX: 1,
+        duration: 0.8,
+        delay: 0.8,
+        ease: "power1.inOut",
+        onComplete: showTitle
+    });
+};
+
+},{"split-type":"fvGAG","gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
 //# sourceMappingURL=app.js.map
