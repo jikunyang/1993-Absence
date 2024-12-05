@@ -1,0 +1,23 @@
+{
+  "name": "1993-absence",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel app.js --hmr-port 50619"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jikunyang/1993-Absence.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jikunyang/1993-Absence/issues"
+  },
+  "homepage": "https://github.com/jikunyang/1993-Absence#readme",
+  "dependencies": {
+    "parcel": "^2.13.2"
+  }
+}
