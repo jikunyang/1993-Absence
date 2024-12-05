@@ -1,1 +1,3 @@
-alert('Hello World')
+//import sliderShader from './sliderShader';
+
+const parceled = true
