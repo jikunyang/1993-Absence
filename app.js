@@ -3,6 +3,7 @@ import  {LoaderTitleSplit,loader} from '/js/preloader.js';
 import  playEffect from '/js/playEffect.js';
 import gsap from "gsap";
 import  trackPopupOpen from '/js/trackPopupOpen.js';
+import  pageTransition from '/js/pageTransition.js';
 
 
 
@@ -11,6 +12,7 @@ const onReady = () => {
     fadeHover();
     playEffect();
     trackPopupOpen();
+    pageTransition();
 }
 const onLoading = () => {
     LoaderTitleSplit();

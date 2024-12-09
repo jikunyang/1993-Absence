@@ -606,11 +606,14 @@ var _gsap = require("gsap");
 var _gsapDefault = parcelHelpers.interopDefault(_gsap);
 var _trackPopupOpenJs = require("/js/trackPopupOpen.js");
 var _trackPopupOpenJsDefault = parcelHelpers.interopDefault(_trackPopupOpenJs);
+var _pageTransitionJs = require("/js/pageTransition.js");
+var _pageTransitionJsDefault = parcelHelpers.interopDefault(_pageTransitionJs);
 const parceled = true;
 const onReady = ()=>{
     (0, _randomFadeHoverJsDefault.default)();
     (0, _playEffectJsDefault.default)();
     (0, _trackPopupOpenJsDefault.default)();
+    (0, _pageTransitionJsDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloaderJs.LoaderTitleSplit)();
@@ -629,7 +632,7 @@ if (document.readyState !== 'loading') {
     document.addEventListener('DOMContentLoaded', onLoading);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC","/js/trackPopupOpen.js":"f6K84"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC","/js/trackPopupOpen.js":"f6K84","/js/pageTransition.js":"huFNz"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -5912,6 +5915,35 @@ const trackPopupOpen = ()=>{
     });
 };
 exports.default = trackPopupOpen;
+
+},{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"huFNz":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _gsap = require("gsap");
+var _gsapDefault = parcelHelpers.interopDefault(_gsap);
+const pageTransition = ()=>{
+    $(".page-link").on("click", function(e) {
+        e.preventDefault(); // Prevent default navigation
+        const link = $(this).attr("href"); // Get the href attribute of the clicked link
+        const currentLink = window.location.pathname; // Get the current page's path
+        // If the clicked link's href is the same as the current page, do nothing
+        if (link === currentLink) return;
+        // Create a fade-out animation for the current page
+        const tl = (0, _gsapDefault.default).timeline({
+            onComplete: ()=>{
+                // Navigate to the new page after animation completes
+                window.location.href = link;
+            }
+        });
+        // Fade out effect
+        tl.to("body", {
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.out"
+        });
+    });
+};
+exports.default = pageTransition;
 
 },{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
