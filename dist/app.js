@@ -604,10 +604,13 @@ var _playEffectJs = require("/js/playEffect.js");
 var _playEffectJsDefault = parcelHelpers.interopDefault(_playEffectJs);
 var _gsap = require("gsap");
 var _gsapDefault = parcelHelpers.interopDefault(_gsap);
+var _trackPopupOpenJs = require("/js/trackPopupOpen.js");
+var _trackPopupOpenJsDefault = parcelHelpers.interopDefault(_trackPopupOpenJs);
 const parceled = true;
 const onReady = ()=>{
     (0, _randomFadeHoverJsDefault.default)();
     (0, _playEffectJsDefault.default)();
+    (0, _trackPopupOpenJsDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloaderJs.LoaderTitleSplit)();
@@ -626,7 +629,7 @@ if (document.readyState !== 'loading') {
     document.addEventListener('DOMContentLoaded', onLoading);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC","/js/trackPopupOpen.js":"f6K84"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -5876,6 +5879,40 @@ const playEffect = ()=>{
 };
 exports.default = playEffect;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gsap":"fPSuC"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gsap":"fPSuC"}],"f6K84":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _gsap = require("gsap");
+var _gsapDefault = parcelHelpers.interopDefault(_gsap);
+const trackPopupOpen = ()=>{
+    (0, _gsapDefault.default).set(".tracks", {
+        opacity: 0,
+        x: "2vw"
+    });
+    $(".open-popup").on("click", ()=>{
+        const tracks = $(".tracks");
+        (0, _gsapDefault.default).to(tracks, {
+            opacity: 1,
+            x: 0,
+            stagger: 0.1,
+            duration: 0.5,
+            ease: "power2.inOut"
+        });
+    });
+    // Handle ".close-popup" click
+    $(".close-popup").on("click", ()=>{
+        const tracks = $(".tracks");
+        (0, _gsapDefault.default).to(tracks, {
+            opacity: 0,
+            x: "2vw",
+            duration: 0.3,
+            stagger: 0.1,
+            ease: "power2.out"
+        });
+    });
+};
+exports.default = trackPopupOpen;
+
+},{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
 //# sourceMappingURL=app.js.map

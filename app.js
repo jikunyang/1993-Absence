@@ -2,13 +2,15 @@ import fadeHover from '/js/randomFadeHover.js';
 import  {LoaderTitleSplit,loader} from '/js/preloader.js';
 import  playEffect from '/js/playEffect.js';
 import gsap from "gsap";
+import  trackPopupOpen from '/js/trackPopupOpen.js';
+
 
 
 const parceled = true
 const onReady = () => {
     fadeHover();
     playEffect();
-    
+    trackPopupOpen();
 }
 const onLoading = () => {
     LoaderTitleSplit();
