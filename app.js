@@ -1,15 +1,20 @@
 import fadeHover from '/js/randomFadeHover.js';
 import  {LoaderTitleSplit,loader} from '/js/preloader.js';
+import  playEffect from '/js/playEffect.js';
+import gsap from "gsap";
+
 
 const parceled = true
 const onReady = () => {
     fadeHover();
+    playEffect();
     
 }
 const onLoading = () => {
     LoaderTitleSplit();
     loader();
- 
+    gsap.set(".preloader", { display: "flex" });
+
 
 
 }

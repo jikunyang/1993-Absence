@@ -600,13 +600,21 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _randomFadeHoverJs = require("/js/randomFadeHover.js");
 var _randomFadeHoverJsDefault = parcelHelpers.interopDefault(_randomFadeHoverJs);
 var _preloaderJs = require("/js/preloader.js");
+var _playEffectJs = require("/js/playEffect.js");
+var _playEffectJsDefault = parcelHelpers.interopDefault(_playEffectJs);
+var _gsap = require("gsap");
+var _gsapDefault = parcelHelpers.interopDefault(_gsap);
 const parceled = true;
 const onReady = ()=>{
     (0, _randomFadeHoverJsDefault.default)();
+    (0, _playEffectJsDefault.default)();
 };
 const onLoading = ()=>{
     (0, _preloaderJs.LoaderTitleSplit)();
     (0, _preloaderJs.loader)();
+    (0, _gsapDefault.default).set(".preloader", {
+        display: "flex"
+    });
 };
 if (document.readyState !== 'loading') {
     onLoading();
@@ -618,7 +626,7 @@ if (document.readyState !== 'loading') {
     document.addEventListener('DOMContentLoaded', onLoading);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -5782,11 +5790,10 @@ function LoaderTitleSplit() {
     const chars = $(".loader-title").find(".char");
     (0, _gsapDefault.default).set(chars, {
         opacity: 0
-    }); // Set initial state
-    const titleLine = $(".preloder-title-line");
-    (0, _gsapDefault.default).set(titleLine, {
+    });
+    (0, _gsapDefault.default).set(".preloder-title-line", {
         scaleY: 0
-    }); // Set initial state
+    });
 }
 function showTitle() {
     const chars = $(".loader-title").find(".char");
@@ -5798,7 +5805,7 @@ function showTitle() {
     });
     (0, _gsapDefault.default).to(chars, {
         opacity: 1,
-        duration: 0.6,
+        duration: 0.5,
         stagger: {
             each: 0.1,
             from: "random"
@@ -5829,6 +5836,46 @@ const loader = ()=>{
     });
 };
 
-},{"split-type":"fvGAG","gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
+},{"split-type":"fvGAG","gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"knDv2":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _gsap = require("gsap");
+var _gsapDefault = parcelHelpers.interopDefault(_gsap);
+const playEffect = ()=>{
+    $("[data-playeffect]").each(function() {
+        const lines = $(this).find(".play-effect-line");
+        // Hover In: Animate lines randomly in a loop
+        $(this).on("mouseenter", ()=>{
+            lines.each(function() {
+                const randomDuration = Math.random() * 0.5 + 1; // Random duration between 0.5s and 1s
+                const randomDelay = Math.random() * 0.3; // Random delay between 0s and 0.3s
+                (0, _gsapDefault.default).fromTo($(this), {
+                    scaleY: 0
+                }, {
+                    scaleY: 1,
+                    duration: randomDuration,
+                    delay: randomDelay,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "power1.inOut"
+                });
+            });
+        });
+        // Hover Out: Reset lines to scaleY: 1
+        $(this).on("mouseleave", ()=>{
+            lines.each(function() {
+                (0, _gsapDefault.default).killTweensOf($(this)); // Stop the animation
+                (0, _gsapDefault.default).to($(this), {
+                    scaleY: 1,
+                    duration: 0.3,
+                    ease: "power1.out"
+                });
+            });
+        });
+    });
+};
+exports.default = playEffect;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gsap":"fPSuC"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
 //# sourceMappingURL=app.js.map

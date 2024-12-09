@@ -2,14 +2,14 @@ import SplitType from "split-type";
 import gsap from "gsap";
 
 function LoaderTitleSplit(){
+
     new SplitType(".loader-title", {
         types: "words, chars",
         tagName: "span",
       });
       const chars = $(".loader-title").find(".char");
-      gsap.set(chars, { opacity: 0 }); // Set initial state
-      const titleLine = $(".preloder-title-line");
-      gsap.set(titleLine, { scaleY: 0 }); // Set initial state
+      gsap.set(chars, { opacity: 0 }); 
+      gsap.set(".preloder-title-line", { scaleY: 0 });
 
 }
 
@@ -27,7 +27,7 @@ function showTitle() {
       
       { 
         opacity: 1,
-        duration: 0.6,
+        duration: 0.5,
         stagger: { each: 0.1, from: "random" }, 
         ease: "power1.out",
         onComplete: showLoadTrigger 
