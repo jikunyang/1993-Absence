@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jikunyang/1993-Absence#readme",
   "dependencies": {
+    "glslCanvas": "^0.2.6",
     "gsap": "^3.12.5",
     "parcel": "^2.13.2",
     "split-type": "^0.3.4"
