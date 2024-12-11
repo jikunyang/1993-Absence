@@ -608,6 +608,8 @@ var _trackPopupOpenJs = require("/js/trackPopupOpen.js");
 var _trackPopupOpenJsDefault = parcelHelpers.interopDefault(_trackPopupOpenJs);
 var _pageTransitionJs = require("/js/pageTransition.js");
 var _pageTransitionJsDefault = parcelHelpers.interopDefault(_pageTransitionJs);
+var _killPreloaderJs = require("/js/killPreloader.js");
+var _killPreloaderJsDefault = parcelHelpers.interopDefault(_killPreloaderJs);
 const parceled = true;
 const onReady = ()=>{
     (0, _randomFadeHoverJsDefault.default)();
@@ -621,6 +623,7 @@ const onLoading = ()=>{
     (0, _gsapDefault.default).set(".preloader", {
         display: "flex"
     });
+    (0, _killPreloaderJsDefault.default)();
 };
 if (document.readyState !== 'loading') {
     onLoading();
@@ -632,7 +635,7 @@ if (document.readyState !== 'loading') {
     document.addEventListener('DOMContentLoaded', onLoading);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC","/js/trackPopupOpen.js":"f6K84","/js/pageTransition.js":"huFNz"}],"gkKU3":[function(require,module,exports,__globalThis) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","/js/randomFadeHover.js":"eXaew","/js/preloader.js":"fr1Gn","/js/playEffect.js":"knDv2","gsap":"fPSuC","/js/trackPopupOpen.js":"f6K84","/js/pageTransition.js":"huFNz","/js/killPreloader.js":"k2UEH"}],"gkKU3":[function(require,module,exports,__globalThis) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -5882,7 +5885,7 @@ const playEffect = ()=>{
 };
 exports.default = playEffect;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","gsap":"fPSuC"}],"f6K84":[function(require,module,exports,__globalThis) {
+},{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"f6K84":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _gsap = require("gsap");
@@ -5945,6 +5948,24 @@ const pageTransition = ()=>{
 };
 exports.default = pageTransition;
 
-},{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
+},{"gsap":"fPSuC","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"k2UEH":[function(require,module,exports,__globalThis) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const killPreloader = ()=>{
+    // Check if the page has been visited in this session
+    if (!sessionStorage.getItem('preloaderShown')) {
+        // Show the preloader on first load or page refresh
+        $(".preloader").show();
+        sessionStorage.setItem('preloaderShown', 'true');
+    } else {
+        // Hide the preloader when navigating back
+        $(".preloader").hide();
+        // Auto-click #load-trigger when .preloader is hidden
+        if (!$(".preloader").is(":visible")) $("#load-trigger").click();
+    }
+};
+exports.default = killPreloader;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
 //# sourceMappingURL=app.js.map

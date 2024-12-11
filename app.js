@@ -4,6 +4,7 @@ import  playEffect from '/js/playEffect.js';
 import gsap from "gsap";
 import  trackPopupOpen from '/js/trackPopupOpen.js';
 import  pageTransition from '/js/pageTransition.js';
+import  killPreloader from '/js/killPreloader.js';
 
 
 
@@ -18,6 +19,7 @@ const onLoading = () => {
     LoaderTitleSplit();
     loader();
     gsap.set(".preloader", { display: "flex" });
+    killPreloader();
 
 
 
