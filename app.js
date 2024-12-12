@@ -5,6 +5,7 @@ import gsap from "gsap";
 import  trackPopupOpen from '/js/trackPopupOpen.js';
 import  pageTransition from '/js/pageTransition.js';
 import  killPreloader from '/js/killPreloader.js';
+import loadCanvas from '/js/canvas.js';
 
 
 
@@ -20,6 +21,7 @@ const onLoading = () => {
     loader();
     gsap.set(".preloader", { display: "flex" });
     killPreloader();
+    loadCanvas();
 
 
 
