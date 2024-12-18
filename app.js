@@ -22,9 +22,6 @@ const onLoading = () => {
     gsap.set(".preloader", { display: "flex" });
     killPreloader();
     loadCanvas();
-
-
-
 }
 
 if (document.readyState !== 'loading') {

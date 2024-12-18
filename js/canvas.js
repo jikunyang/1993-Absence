@@ -1,4 +1,4 @@
-import frag from '/js/homeShader.js';
+import fragTD from '/js/tdShader.js';
 import GlslCanvas from 'glslCanvas';
 
 const loadCanvas = () => {
@@ -13,7 +13,7 @@ const loadCanvas = () => {
 
     
     // Load the shader code
-    sandbox.load(frag);
+    sandbox.load(fragTD);
     // Create a WebGL texture with GL_NEAREST filtering
 
     // Set the texture to GlslCanvas
@@ -25,7 +25,7 @@ const loadCanvas = () => {
         const mouseY = e.clientY - rect.top;
         sandbox.setUniform("u_mouse", [mouseX, mouseY]);
     });
-    console.log(frag);
+    console.log(fragTD);
     console.log("canvas");
 
 

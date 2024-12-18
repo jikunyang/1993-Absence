@@ -5972,8 +5972,8 @@ exports.default = killPreloader;
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"13tVG":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-var _homeShaderJs = require("/js/homeShader.js");
-var _homeShaderJsDefault = parcelHelpers.interopDefault(_homeShaderJs);
+var _tdShaderJs = require("/js/tdShader.js");
+var _tdShaderJsDefault = parcelHelpers.interopDefault(_tdShaderJs);
 var _glslCanvas = require("glslCanvas");
 var _glslCanvasDefault = parcelHelpers.interopDefault(_glslCanvas);
 const loadCanvas = ()=>{
@@ -5985,7 +5985,7 @@ const loadCanvas = ()=>{
     // Create a new GlslCanvas instance
     const sandbox = new (0, _glslCanvasDefault.default)(canvas);
     // Load the shader code
-    sandbox.load((0, _homeShaderJsDefault.default));
+    sandbox.load((0, _tdShaderJsDefault.default));
     // Create a WebGL texture with GL_NEAREST filtering
     // Set the texture to GlslCanvas
     sandbox.setUniform("bgImage", "https://cdn.prod.website-files.com/6750d2ccd60d9947409d2c73/675154de17da61ac210d6f5c_seo-min.jpg");
@@ -5999,12 +5999,103 @@ const loadCanvas = ()=>{
             mouseY
         ]);
     });
-    console.log((0, _homeShaderJsDefault.default));
+    console.log((0, _tdShaderJsDefault.default));
     console.log("canvas");
 };
 exports.default = loadCanvas;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","glslCanvas":"2pjUq","/js/homeShader.js":"l9CI2"}],"2pjUq":[function(require,module,exports,__globalThis) {
+},{"/js/tdShader.js":"2yizj","glslCanvas":"2pjUq","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2yizj":[function(require,module,exports,__globalThis) {
+// GLSL fragment shader code
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const fragTD = `
+#ifdef GL_ES
+precision highp float;
+#endif
+
+#extension GL_OES_standard_derivatives : enable
+
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform sampler2D u_texture;
+
+varying vec2 v_texcoord;
+
+// Noise Function
+float rand(vec2 n) {
+    return fract(sin(dot(n, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+    vec2 ip = floor(p);
+    vec2 u = fract(p);
+    u = u * u * (3.0 - 2.0 * u);
+
+    float res = mix(
+        mix(rand(ip), rand(ip + vec2(1.0, 0.0)), u.x),
+        mix(rand(ip + vec2(0.0, 1.0)), rand(ip + vec2(1.0, 1.0)), u.x),
+        u.y
+    );
+    return res;
+}
+
+// Blur Function (Simple Box Blur)
+vec3 blur(sampler2D tex, vec2 uv, float radius) {
+    vec3 color = vec3(0.0);
+    float total = 0.0;
+
+    // Use constant bounds for GLSL ES compatibility
+    for (int x = -3; x <= 3; x++) {
+        for (int y = -3; y <= 3; y++) {
+            vec2 offset = vec2(float(x), float(y)) / u_resolution;
+            color += texture2D(tex, uv + offset).rgb;
+            total += 1.0;
+        }
+    }
+    return color / total;
+}
+
+// Slope Function (Derivative Approximation)
+float slope(vec2 p) {
+    float dx = dFdx(p.x);
+    float dy = dFdy(p.y);
+    return abs(dx) + abs(dy);
+}
+
+// Remap Function
+float remap(float value, float inMin, float inMax, float outMin, float outMax) {
+    return mix(outMin, outMax, (value - inMin) / (inMax - inMin));
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+
+    // Noise Operation
+    float n = noise(uv * 10.0 + u_time);
+
+    // Blur Operation
+    vec3 baseColor = texture2D(u_texture, uv).rgb;
+    vec3 blurred = blur(u_texture, uv, 3.0);
+
+    // Slope Operation
+    float s = slope(uv);
+
+    // Add Operation
+    vec3 finalColor = baseColor + vec3(n) * 0.5;
+
+    // Remap Operation
+    float remapped = remap(n, 0.0, 1.0, 0.2, 1.0);
+    finalColor *= remapped;
+
+    // Combine everything
+    gl_FragColor = vec4(finalColor + vec3(s), 1.0);
+}
+
+`;
+exports.default = fragTD;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"2pjUq":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _xhr = require("xhr");
@@ -7574,133 +7665,6 @@ function extend() {
     return target;
 }
 
-},{}],"l9CI2":[function(require,module,exports,__globalThis) {
-// GLSL fragment shader code
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-const frag = `
-#ifdef GL_ES
-precision highp float;
-#endif
-
-uniform float u_time;
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform vec3 spectrum;
-uniform sampler2D bgImage;
-
-varying vec3 v_normal;
-varying vec2 v_texcoord;
-
-float colormap_red(float x) {
-    if (x < 0.0) {
-        return 16.0 / 255.0;
-    } else if (x <= 1.0) {
-        if (x <= 0.33) {
-            return 92.0 / 255.0;
-        } else if (x <= 0.66) {
-            return 16.0 / 255.0;
-        } else {
-            return 60.0 / 255.0;
-        }
-    } else {
-        return 219.0 / 255.0;
-    }
-}
-
-float colormap_green(float x) {
-    if (x < 0.0) {
-        return 183.0 / 255.0;
-    } else if (x <= 1.0) {
-        if (x <= 0.33) {
-            return 196.0 / 255.0;
-        } else if (x <= 0.66) {
-            return 183.0 / 255.0;
-        } else {
-            return 60.0 / 255.0;
-        }
-    } else {
-        return 109.0 / 255.0;
-    }
-}
-
-float colormap_blue(float x) {
-    if (x < 0.0) {
-        return 202.0 / 255.0;
-    } else if (x <= 1.0) {
-        if (x <= 0.33) {
-            return 140.0 / 255.0;
-        } else if (x <= 0.66) {
-            return 202.0 / 255.0;
-        } else {
-            return 60.0 / 255.0;
-        }
-    } else {
-        return 157.0 / 255.0;
-    }
-}
-
-vec4 colormap(float x) {
-    return vec4(colormap_red(x), colormap_green(x), colormap_blue(x), 1.0);
-}
-
-float rand(vec2 n) {
-    return fract(sin(dot(n, vec2(0.5, 78))) * 4375.0);
-}
-
-float noise(vec2 p) {
-    vec2 ip = floor(p);
-    vec2 u = fract(p);
-    u = u * u * (3.0 - 2.0 * u);
-
-    float res = mix(
-        mix(rand(ip), rand(ip + vec2(1.0, 0.0)), u.x),
-        mix(rand(ip + vec2(0.0, 1.0)), rand(ip + vec2(1.0, 1.0)), u.x),
-        u.y);
-    return res;
-}
-
-
-float fbm(vec2 p) {
-    float f = -0.8;
-    float amp = 1.0;
-    for (int i = 0; i < 10; i++) {
-        f += amp * noise(p);
-        p *= 1.5;
-        amp *= 0.5;
-    }
-    return f/0.87;
-}
-
-float pattern(vec2 p) {
-    // Moving effect using time
-    return fbm(p + fbm(p + vec2(u_time * 0.1, u_time * 0.1)));
-}
-
-void main() {
-    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-
-    // Animated pattern
-    float shade = pattern(uv * 5.5);
-
-    // Generate grain noise texture
-    float grain = rand(uv * u_time) * 0.07; // Grain intensity (adjust 0.05 as needed)
-
-    // Combine shade and grain, ensuring black background
-    float finalShade = shade + grain;
-
-    // Ensure final output is between 0 (black) and 1 (white)
-    finalShade = clamp(finalShade, 0.0, 1.0);
-
-    // Output the final color with black background
-    gl_FragColor = vec4(vec3(finalShade), 1.0);
-}
-
-
-
-`;
-exports.default = frag;
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
+},{}]},["jQqog","igcvL"], "igcvL", "parcelRequire94c2")
 
 //# sourceMappingURL=app.js.map
